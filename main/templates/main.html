@@ -1,44 +1,54 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Shopping List Page</h1>
-<h5>Name: </h5>
-<p>{{name}}</p> <!-- Ubahlah sesuai dengan nama kamu -->
-<h5>Class: </h5>
-<p>{{class}}</p>
-<table>
-    <tr>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Description</th>
-        <th>Date Added</th>
-    </tr>
+{% include 'navbar.html' %}
+<div class=" hidden md:flex fixed right-0 top-0 h-screen w-3/4 bg-blue-700 -z-20" style="clip-path: polygon(100% 0%, 100% 100%, 0% 100%, 80% 0%);">
+</div>
 
-    {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
 
-    {% for product in products %}
-        <tr>
-            <td>{{product.name}}</td>
-            <td>{{product.price}}</td>
-            <td>{{product.description}}</td>
-            <td>{{product.date_added}}</td>
+<div class="mt-20 lg:mt-24 mx-4 ">
+    <div class="w-full  flex">
+        <h1 class="mx-auto font-mono text-xl font-bold md:text-2xl lg:text-4xl text-[#00A8FF] mb-4">Daftar Belanja Kamu</h1>
+    </div>
+    <div class="w-full  flex">
+        <h1 class="mx-auto font-mono text-sm font-bold  text-[#00A8FF] mb-4">Terakhir login: {{last_login}}</h1>
+    </div>
+    <div class="flex w-full bg-slate-950 flex-wrap rounded-md text-base px-2 py-1 justify-between py-2 text-base text-white">
+        <div class="flex justify-start items-center space-x-4">
+            <h1>Name: <span class="text-[#00A8FF]">{{name}}</span></h1>
+            <h1>Class: <span class="text-[#00A8FF]">{{class}}</span> </h1>
+        </div>
+        <div>
+            <button class="px-2 py-1 rounded-md bg-slate-800 hover:bg-slate-800"><a href="{% url 'main:create_product' %}">Tambah Produk Baru</a></button>
+        </div>
+    </div>
+</div>
+<div class=" overflow-x-auto">
+    <table class=" mx-4 bg-slate-800 lg:min-w-5xl flex flex-col ">
+        <thead class="bg-slate-700 w-full">
+        <tr class="w-full  flex text-[#00A8FF] items-stretch md:text-lg text-base uppercase  ">
+            <th class="min-w-[30%] w-[30%]  text-left pl-2 border-r-2 border-slate-600">Name</th>
+            <th class="min-w-[15%] w-[15%] text-left pl-2 border-r-2 border-slate-600">Price</th>
+            <th class="flex-grow  text-left pl-2 border-r-2 border-slate-600">Description</th>
+            <th class="min-w-[15%] w-[15%] text-left pl-2 ">Date Added</th>
         </tr>
-    {% endfor %}
-</table>
+        </thead>
+    
+        {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
+        <tbody class=" w-full ">
+        {% for product in products %}
+            <tr class="odd:bg-slate-800 even:bg-gray-900 flex items-stretch  flex text-blue-400 items-center lg:text-lg md:text-base text-sm" >
+                <td class="min-w-[30%] w-[30%] py-auto  text-justify px-2 border-r-2 px-2 border-slate-600">{{product.name}}</td>
+                <td class="min-w-[15%] w-[15%] text-justify px-2 border-r-2 border-slate-600">{{product.price}}</td>
+                <td class="flex-grow  text-justify px-2 border-r-2  border-slate-600">{{product.description}}</td>
+                <td class="min-w-[15%] w-[15%] text-justify px-2">{{product.date_added}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 <br />
 
-<a href="{% url 'main:create_product' %}">
-    <button>
-        Add New Product
-    </button>
-</a>
-
-<a href="{% url 'main:logout' %}">
-    <button>
-        Logout
-    </button>
-</a>
-<h5>Sesi terakhir login: {{ last_login }}</h5>
 {% endblock content %}
     

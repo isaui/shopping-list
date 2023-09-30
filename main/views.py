@@ -23,8 +23,10 @@ def logout_user(request):
 
 def login_user(request):
     if request.method == 'POST':
+        print("heheh not bad")
         username = request.POST.get('username')
         password = request.POST.get('password')
+        print(username, password)
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
@@ -56,7 +58,7 @@ def show_main(request):
         'name': request.user.username,
         'class': 'PBP D',
         'products':products,
-        'last_login': request.COOKIES['last_login'],
+        'last_login': request.COOKIES.get('last_login', 'Tidak ada data'),
     }
     return render(request, "main.html", context)
 def create_product(request):

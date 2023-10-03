@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block meta %}
-    <title>Tambahkan Belanja</title>
+    <title>Edit Belanja</title>
     
 {% endblock meta %}
 {% block content %}
@@ -18,13 +18,13 @@
 
 <div class=" min-h-screen overflow-y-auto flex flex-col justify-center items-center w-screen">
     <div class="mb-4 flex font-bold w-full text-white lg:text-4xl md:text-2xl text-xl">
-        <h1 class=" mx-auto">Tambahkan <span class="text-[#00A8FF]">Belanja</span> </h1>
+        <h1 class=" mx-auto">Edit <span class="text-[#00A8FF]">Belanja</span> </h1>
     </div>
     <form  class="flex flex-col min-h-[28rem] bg-slate-950 px-4 py-2 rounded-md text-white max-w-[95%] min-w-[18rem] md:w-[28rem] w-[24rem]" autocomplete="off" method="post">
         {% csrf_token %}
         <div class="mb-4">
             <label for="name" class="block text-white text-sm  mb-2">Nama Produk</label>
-            <input autocomplete="off" required type="text" name="name"  class=" bg-slate-800 focus:border  text-white  text-sm rounded-xs focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Masukkan nama kamu" id="username">
+            <input autocomplete="off" value="{{product.name}}" required type="text" name="name"  class=" bg-slate-800 focus:border  text-white  text-sm rounded-xs focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Masukkan nama kamu" id="username">
         </div>
         <div class="mb-4">
             <label for="price" class="block text-white text-sm mb-2">Harga Produk</label>
@@ -35,20 +35,21 @@
                 name="price"
                 min="1"
                 step="1"
-                placeholder="Tuliskan harga produk"
+                value="{{product.price}}"
+                placeholder="Edit harga produk"
                 class="bg-slate-800 focus:border  text-white  text-sm rounded-xs focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             >
         </div>
         <div class="mb-4">
             <label for="description" class=" text-white mb-2 mt-2 text-sm">Deskripsi</label>
-            <textarea row="8" required id="description" for="description"name="description" class="bg-slate-800 focus:border  text-white  text-sm rounded-xs focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" type="text" placeholder="Deskripsi tentang produk"></textarea>
+            <textarea rows="8" required id="description" for="description"name="description" class="bg-slate-800 focus:border  text-white  text-sm rounded-xs focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" type="text" placeholder="Edit deskripsi tentang produk">{{product.description}}</textarea>
         </div>
         
         <div class="mb-4 mt-auto">
             <hr class=" border-2 rounded-md border-[#00A8FF]">
         </div>
         <div class="mb-2 w-full   text-sm flex">
-            <button onclick="onSubmit()" class="ml-auto px-4 py-2 bg-[#00A8FF] text-black hover:text-white hover:bg-blue-900 rounded-sm"type="submit">Masuk</button>
+            <button onclick="onSubmit()" class="ml-auto px-4 py-2 bg-[#00A8FF] text-black hover:text-white hover:bg-blue-900 rounded-sm"type="submit">Simpan</button>
         </div>
         
     </form>

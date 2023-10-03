@@ -61,6 +61,7 @@ def show_main(request):
         'last_login': request.COOKIES.get('last_login', 'Tidak ada data'),
     }
     return render(request, "main.html", context)
+@login_required(login_url='/login')
 def create_product(request):
     form = ProductForm(request.POST or None)
 
@@ -71,7 +72,33 @@ def create_product(request):
         return HttpResponseRedirect(reverse('main:show_main'))
 
     context = {'form': form}
+    
     return render(request, "create_product.html", context)
+
+@login_required(login_url='/login')
+def edit_product(request, id):
+    # Get product berdasarkan ID
+    product = Product.objects.get(pk = id)
+
+    # Set product sebagai instance dari form
+    form = ProductForm(request.POST or None, instance=product)
+
+    if form.is_valid() and request.method == "POST":
+        # Simpan form dan kembali ke halaman awal
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'product': product}
+    return render(request, "edit_product.html", context)
+
+def delete_product(request, id):
+    # Get data berdasarkan ID
+    product = Product.objects.get(pk = id)
+    # Hapus data
+    product.delete()
+    # Kembali ke halaman awal
+    return HttpResponseRedirect(reverse('main:show_main'))
+
 def show_xml(request):
     data = Product.objects.all()
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")

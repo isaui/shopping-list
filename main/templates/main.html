@@ -13,12 +13,12 @@
     <div class="w-full  flex">
         <h1 class="mx-auto font-mono text-sm font-bold  text-[#00A8FF] mb-4">Terakhir login: {{last_login}}</h1>
     </div>
-    <div class="flex w-full bg-slate-950 flex-wrap rounded-md text-base px-2 py-1 justify-between py-2 text-base text-white">
-        <div class="flex justify-start items-center space-x-4">
+    <div class="flex w-full bg-slate-950 flex-wrap rounded-t-md  px-2 py-1 justify-between py-2 md:text-base text-xs text-white">
+        <div class="flex flex-col md:flex-row justify-start md:items-center md:space-x-4">
             <h1>Name: <span class="text-[#00A8FF]">{{name}}</span></h1>
             <h1>Class: <span class="text-[#00A8FF]">{{class}}</span> </h1>
         </div>
-        <div>
+        <div class="ml-2">
             <button class="px-2 py-1 rounded-md bg-slate-800 hover:bg-slate-800"><a href="{% url 'main:create_product' %}">Tambah Produk Baru</a></button>
         </div>
     </div>
@@ -26,24 +26,48 @@
 <div class=" overflow-x-auto">
     <table class=" mx-4 bg-slate-800 lg:min-w-5xl flex flex-col ">
         <thead class="bg-slate-700 w-full">
-        <tr class="w-full  flex text-[#00A8FF] items-stretch md:text-lg text-base uppercase  ">
+        <tr class="w-full  flex text-[#00A8FF] items-stretch md:text-base text-xs uppercase break-words ">
             <th class="min-w-[30%] w-[30%]  text-left pl-2 border-r-2 border-slate-600">Name</th>
             <th class="min-w-[15%] w-[15%] text-left pl-2 border-r-2 border-slate-600">Price</th>
             <th class="flex-grow  text-left pl-2 border-r-2 border-slate-600">Description</th>
-            <th class="min-w-[15%] w-[15%] text-left pl-2 ">Date Added</th>
+            <th class="min-w-[15%] w-[15%] border-r-2 text-left pl-2 border-slate-600">Date Added</th>
+            <th class="min-w-[15%] w-[15%] text-left pl-2 ">Operation</th>
         </tr>
         </thead>
     
         {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
         <tbody class=" w-full ">
-        {% for product in products %}
-            <tr class="odd:bg-slate-800 even:bg-gray-900 flex items-stretch  flex text-blue-400 items-center lg:text-lg md:text-base text-sm" >
-                <td class="min-w-[30%] w-[30%] py-auto  text-justify px-2 border-r-2 px-2 border-slate-600">{{product.name}}</td>
-                <td class="min-w-[15%] w-[15%] text-justify px-2 border-r-2 border-slate-600">{{product.price}}</td>
-                <td class="flex-grow  text-justify px-2 border-r-2  border-slate-600">{{product.description}}</td>
-                <td class="min-w-[15%] w-[15%] text-justify px-2">{{product.date_added}}</td>
+        
+        {% if not products %}
+            <tr class="w-full py-4 bg-slate-800 flex items-center justify-center min-h-[12rem] lg:text-base md:text-sm text-xs text-white">
+                <td>
+                    <h1>
+                        Keranjang belanja Anda masih kosong. Silahkan menambahkan
+                    </h1>
+                </td>
             </tr>
-        {% endfor %}
+        {% else %}
+        {% for product in products %}
+        <tr class="odd:bg-slate-800 even:bg-gray-900 flex items-stretch  flex text-blue-400 items-center lg:text-base md:text-sm text-xs" >
+            <td class="min-w-[30%] w-[30%] py-auto my-2  text-justify px-2 ">{{product.name}}</td>
+            <td class="min-w-[15%] w-[15%] text-justify my-2 px-2 ">{{product.price}}</td>
+            <td class="flex-grow  text-justify px-2  my-2 ">{{product.description}}</td>
+            <td class="min-w-[15%] w-[15%] text-justify px-2 my-2  ">{{product.date_added}}</td>
+            <td class="min-w-[15%] w-[15%] text-justify my-2 px-2 ">
+                <div class="flex  flex-col lg:flex-row items-start lg:items-center lg:space-x-4 space-y-4 lg:space-y-0">
+                    <button  class=" max-w-full bg-slate-900 hover:bg-blue-900 text-white font-semibold py-2 px-4 rounded-md flex justify-center items-center">
+                        <a class="text-xs" href="{% url 'main:edit_product' product.pk %}">Edit</a>
+                    </button>
+                    <button  class=" max-w-full bg-red-700  hover:bg-red-500 text-white font-semibold py-2 px-4 rounded-md flex justify-center items-center">
+                        <a class="text-xs" href="{% url 'main:delete_product' product.pk %}">Delete</a>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+        {% endif %}
+            
+        
         </tbody>
     </table>
 </div>

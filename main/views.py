@@ -4,9 +4,9 @@ from main.forms import ProductForm
 from django.urls import reverse
 from django.forms import ModelForm
 from main.models import Product
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.core import serializers
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages  
 from django.contrib.auth import authenticate, login
@@ -14,6 +14,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 import datetime
 from django.views.decorators.csrf import csrf_exempt
+import json
 
 def get_product_json(request):
     product_item = Product.objects.filter(user = request.user)
@@ -31,6 +32,64 @@ def add_product_ajax(request):
         new_product.save()
         return HttpResponse(b"CREATED", status=201)
     return HttpResponseNotFound()
+
+def get_product_ajax(request,product_id):
+    try:
+        product = get_object_or_404(Product, pk=product_id)
+        data = {
+            'name': product.name,
+            'price': product.price,
+            'description': product.description,
+        }
+        return JsonResponse(data)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+@csrf_exempt
+def delete_product_ajax(request):
+    if(request.method == 'POST'):
+        try:
+            data = json.load(request)
+            id = data.get("id")
+            product = Product.objects.get(pk = id)
+            product.delete()
+            response_data = {
+                'status': 'success',
+                'message' : 'Produk berhasil dihapus'
+            }
+            return JsonResponse(response_data)
+        except Product.DoesNotExist:
+            response_data = {
+                'status': 'failed',
+                'message' : 'Produk tidak ditemukan'
+            }
+            return JsonResponse(response_data)
+@csrf_exempt
+def edit_product_ajax(request):
+    if(request.method == 'POST'):
+        try:
+            data = json.load(request)
+            id = data.get("id")
+            name = data.get("name")
+            price = data.get("price")
+            description = data.get("description")
+            product = Product.objects.get(pk = id)
+            product.name = name
+            product.description = description
+            product.price = int(price)
+            product.save()
+            response_data = {
+                'status': 'success',
+                'message' : 'Produk berhasil diedit'
+            }
+            return JsonResponse(response_data)
+        except Exception as e:
+             response_data = {
+                'status': 'failed',
+                'message' : 'Terdapat kesalahan dalam mengedit produk: ' + str(e)
+            }
+             return JsonResponse(response_data)
+
 
 def logout_user(request):
     logout(request)

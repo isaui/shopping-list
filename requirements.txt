@@ -6,3 +6,4 @@ requests
 urllib3
 django-environ
 django-cors-headers
+pymysql

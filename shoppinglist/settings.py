@@ -91,14 +91,11 @@ WSGI_APPLICATION = 'shoppinglist.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'shoppinglist_yesspinsee',
-        'USER': 'shoppinglist_yesspinsee',
-        'PASSWORD': '3991d06b717298fa2d8f5e5584d2dddae7afcc94',
-        'HOST': 'ty8.h.filess.io',
-        'PORT': '3307',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
 if PRODUCTION:
     DATABASES = {
         'default': env.db('DATABASE_URL')
